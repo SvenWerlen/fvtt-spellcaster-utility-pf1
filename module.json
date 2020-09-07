@@ -1,0 +1,35 @@
+{
+  "name": "spellcaster-utility-pf1",
+  "title": "Spellcaster Utility for PF1",
+  "description": "Several UI and tools for spellcaster (PF1 system)",
+  "version": "0.1.0",
+  "author": "Sven Werlen",
+  "scripts": ["spellcaster.js", "scripts/prepare-spells.js"],
+  "systems": ["pf1"],
+  "styles": ["spellcaster.css"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "fr",
+      "name": "French",
+      "path": "lang/fr.json"
+    }
+  ],
+  "packs": [
+    {
+      "name": "data-macros",
+      "label": "Data Macros",
+      "path": "./packs/data-macros.db",
+      "entity": "Macro"
+    }
+  ],
+  "url": "https://github.com/SvenWerlen/fvtt-spellcaster-utility-pf1",
+  "download": "https://github.com/SvenWerlen/fvtt-spellcaster-utility-pf1/archive/v-0.1.0.zip",
+  "manifest": "https://raw.githubusercontent.com/SvenWerlen/fvtt-spellcaster-utility-pf1/master/module.json",
+  "minimumCoreVersion": "0.6.6",
+  "compatibleCoreVersion": "1.0.0"
+}

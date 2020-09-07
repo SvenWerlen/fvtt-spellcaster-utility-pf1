@@ -1,0 +1,11 @@
+{
+  "scu.prepareTitle": "Prepare Spells",
+  "scu.prepareDescription": "Some description",
+  
+  
+  "scu.errorNoActor": "You are not owner of any actor. Please contact your GM about this.",
+  "scu.errorMultipleActors": "You own more than one actor. Please choose an actor on the scene.",
+  "scu.errorInvalidActor": "'{actor}' is not a PC. Please choose a valid actor!",
+  
+  "" : ""
+}
