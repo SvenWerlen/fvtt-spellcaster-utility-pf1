@@ -1,48 +1,69 @@
-
-
-<form class="prepare flexcol" autocomplete="off">
-  {{#if errorMsg}}
-    <div class="error">{{errorMsg}}</div>
-  {{/if}}
-  {{#unless errorMsg}}
-  <div class="tab inventory-group flexcol active" data-group="spells_primary" data-tab="spells_primary_0">
+{{#if errorMsg}}
+  <div class="error">{{errorMsg}}</div>
+{{/if}}
+{{#unless errorMsg}}
+<div class="tab inventory-group flexcol active" data-group="spells_primary" data-tab="spells_primary_0">
+  <ol class="inventory-list scroll scroll-spells_primary">
     {{#each levels as |level sid|}}
-    <ol class="inventory-list sub-scroll scroll-spells_primary">
-      <li class="flexrow inventory-header spellbook-header">
-        <div class="item-name flexrow">
-          <h3>{{localize level.localize}}</h3>
+    <li class="flexrow inventory-header spellbook-header">
+      <div class="item-name flexrow">
+        <h3>{{localize level.localize}}</h3>
+      </div>
+      
+      <div class="spell-uses config">
+        <div class="tooltip">
+          <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> 
+          {{ level.prepared }}
         </div>
-        
-        <div class="spell-uses config">
-          <div class="tooltip"><span class="tooltipcontent">asdfas</span> 0</div>
+        <span class="sep"> / </span>
+        <div class="tooltip">
+          <span class="tooltipcontent">{{localize "PF1.SpellsTotalEachDay"}}</span> 
+          {{ level.max }}
         </div>
-        <div class="spell-school">{{localize "PF1.SpellSchool"}}</div>
-        <div class="item-controls"></div>
-        
-      </li>
+      </div>
+      <div class="spell-school">{{localize "PF1.SpellSchool"}}</div>
+      <div class="item-controls"></div>
+      
+    </li>
+    <ol class="item-list">
       {{#each level.spells as |spell sid|}}
-      <ol class="item-list">
-        <li class="item flexrow" data-item-id="{{spell._id}}">
-          <div class="item-name flexrow rollable">
-            <div class="item-image" style="background-image: url({{spell.img}})"></div>
-            <h4>{{spell.name}}</h4>
-          </div>
-          
-          <div class="spell-uses flexrow">
+      <li class="item flexrow {{spell.prepared}}" data-item-id="{{spell._id}}">
+        <div class="item-name flexrow rollable">
+          <div class="item-image" style="background-image: url({{spell.img}})"></div>
+          <h4>{{spell.name}}</h4>
+        </div>
+        
+        <div class="spell-uses flexrow">
+          {{#if ../../spontaneous}}
+            <div class="tooltip">
+              {{#if spell.data.preparation.spontaneousPrepared}}
+                <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> <i class="fas fa-check"></i>
+              {{/if}}
+              {{#unless spell.data.preparation.spontaneousPrepared}}
+                <span class="tooltipcontent">{{ localize "PF1.Unprepared" }}</span> 
+              {{/unless}}
+            </div>
+          {{/if}}
+          {{#unless ../../spontaneous}}
             <div class="tooltip">
               <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> {{spell.data.preparation.preparedAmount}}
             </div>
-          </div>
-          <div class="spell-school">{{ spell.data.school }}</div>
-          <div class="item-controls">
-            <a class="item-control spell-uses-add" title="{{ localize "scu.preparedAdd" }}"><i class="fas fa-plus"></i></a>
-            <a class="item-control spell-uses-sub" title="{{ localize "scu.preparedSub" }}"><i class="fas fa-minus"></i></a>
-          </div> 
-        </li>
-      </ol>
+          {{/unless}}
+        </div>
+        <div class="spell-school">{{ spell.data.school }}</div>
+        <div class="item-controls">
+          <a class="item-control spell-uses-add" title="{{ localize "scu.preparedAdd" }}"><i class="fas fa-plus"></i></a>
+          <a class="item-control spell-uses-sub" title="{{ localize "scu.preparedSub" }}"><i class="fas fa-minus"></i></a>
+        </div> 
+      </li>
       {{/each}}
     </ol>
-    {{/each}}
-  </div>
-  {{/unless}}
-</form>
+  {{/each}}
+  </ol>
+</div>
+{{/unless}}
+
+<div class="dialog-buttons">
+  <button type="button" name="clear">{{ localize "scu.clearPreparation" }}</button>
+  <button type="button" name="apply">{{ localize "scu.applyChanges" }}</button>
+</div>
