@@ -4,7 +4,7 @@
   "description": "Several UI and tools for spellcaster (PF1 system)",
   "version": "0.1.0",
   "author": "Sven Werlen",
-  "scripts": ["spellcaster.js", "scripts/prepare-spells.js"],
+  "scripts": ["spellcaster.js", "scripts/prepare-spells.js", "scripts/cast-spells.js"],
   "systems": ["pf1"],
   "styles": ["spellcaster.css"],
   "languages": [
@@ -21,9 +21,9 @@
   ],
   "packs": [
     {
-      "name": "data-macros",
-      "label": "Data Macros",
-      "path": "./packs/data-macros.db",
+      "name": "spellcaster-macros",
+      "label": "Spellcaster Macros",
+      "path": "./packs/spellcaster-macros.db",
       "entity": "Macro"
     }
   ],

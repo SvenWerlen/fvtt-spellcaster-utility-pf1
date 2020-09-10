@@ -2,15 +2,24 @@
   max-height: 40px;
 }
 
+.scu .description {
+  max-height: 20px;
+}
+
 .scu .dialog-buttons button {
+  margin-top: 5px;
   max-width: 200px;
 }
 
-.pf1.sheet.actor .inventory-list .item.prepared {
+.scu .inventory-list .item.prepared {
   font-size: large;
   margin-left: 12px;
 }
 
-.pf1.sheet.actor .inventory-list .item.prepared .spell-uses {
+.scu .inventory-list .item.prepared .spell-uses {
   font-size: large;
+}
+
+.scu .inventory-list .item .item-attack {
+  margin-left: 3px;
 }

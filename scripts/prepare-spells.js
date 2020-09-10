@@ -7,7 +7,12 @@ class SCUPrepareSpells extends FormApplication {
   constructor(object, options) {
     super(object, options);
     
-    this.spellbook = "primary"
+    console.log("Spellcaster Utility | Options", options)
+    if(options && options.spellbook) {
+      this.spellbook = options.spellbook
+    } else {
+      this.spellbook = "primary"
+    }
   }
   
   static get defaultOptions() {
@@ -44,13 +49,13 @@ class SCUPrepareSpells extends FormApplication {
     data.spontaneous = spellbook.spontaneous
 
     if( !this.spells ) {
-      this.spells = duplicate(this.actor.data.items.filter( i => i.type == "spell" ))
+      this.spells = duplicate(this.actor.data.items.filter( i => i.type == "spell" && i.data.spellbook == this.spellbook ))
       this.spells.sort(function(a,b) { return a.name.localeCompare(b.name); })
     }
     
     let levels = {}
     this.spells.forEach( sp => {
-      //console.log(sp)
+      console.log(sp)
       const lvl = sp.data.level
       if( ! levels[lvl] ) {
         levels[lvl] = { level: lvl, localize : "PF1.SpellLevel" + lvl, prepared: 0, 'spells': []}
@@ -77,8 +82,10 @@ class SCUPrepareSpells extends FormApplication {
   activateListeners(html) {
     super.activateListeners(html);
     html.find(".item-controls a").click(this._onControl.bind(this));
+    html.find('.item-name h4').mousedown(this._onControl.bind(this));
     html.find('button[name="clear"]').click(this._onClear.bind(this))
     html.find('button[name="apply"]').click(this._onApply.bind(this))
+    html.find('.item .item-image').click(event => this._onItemRoll(event));
     
     // restore scroll position
     if(this.scrollTop) {
@@ -86,10 +93,21 @@ class SCUPrepareSpells extends FormApplication {
     }
   }
   
+  _onItemRoll(event) {
+    event.preventDefault();
+    const itemId = event.currentTarget.closest(".item").dataset.itemId;
+    const item = this.actor.getOwnedItem(itemId);
+
+    if (item == null) return;
+    return item.roll();
+  }
+
+  
   async _onControl(event) {
     event.preventDefault();
     const a = event.currentTarget;
     const itemId = a.closest(".item").dataset.itemId;
+
     // retrieve spell
     let spell = this.spells.filter( i => i._id == itemId )
     if( spell.length == 0 ) return
@@ -98,18 +116,21 @@ class SCUPrepareSpells extends FormApplication {
     // keep track of current scroll position
     this.scrollTop = a.closest(".scroll").scrollTop;
     
+    // retrieve action (add/sub)
+    let actionAdd = true
+    if(a.classList.contains("name")) {
+      actionAdd = event.which == 1
+    } else {
+      actionAdd = a.classList.contains("spell-uses-add")
+    }
+    
     // increase / decrease
     const spontaneous = this.actor.data.data.attributes.spells.spellbooks[this.spellbook].spontaneous
     if(spontaneous) {
-      spell.data.preparation.spontaneousPrepared = a.classList.contains("spell-uses-add")
+      spell.data.preparation.spontaneousPrepared = actionAdd
     }
     else {
-      if( a.classList.contains("spell-uses-add") ) {
-        spell.data.preparation.preparedAmount += 1
-      } else if( a.classList.contains("spell-uses-sub") ) {
-        if( spell.data.preparation.preparedAmount == 0 ) return
-        spell.data.preparation.preparedAmount -= 1
-      }
+      spell.data.preparation.preparedAmount += actionAdd ? 1 : -1
     }
     this.render()
   }
@@ -183,7 +204,9 @@ class SCUPrepareSpells extends FormApplication {
     Object.keys(levels).forEach( lvl => {
       const key = "spell" + lvl
       const max = this.actor.data.data.attributes.spells.spellbooks[this.spellbook].spells[key].max
-      update.data.attributes.spells.spellbooks[this.spellbook].spells[key] = { value: max - levels[lvl] }
+      if(!spontaneous) {
+        update.data.attributes.spells.spellbooks[this.spellbook].spells[key] = { value: max - levels[lvl] }
+      }
     });
     this.actor.update(update)
   }
