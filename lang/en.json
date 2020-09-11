@@ -13,6 +13,8 @@
   "scu.errorNoActor": "You are not owner of any actor. Please contact your GM about this.",
   "scu.errorMultipleActors": "You own more than one actor. Please choose an actor on the scene.",
   "scu.errorInvalidActor": "'{actor}' is not a PC. Please choose a valid actor!",
+  "scu.errorNoSpell": "{actor} doesn't have any spell in {spellbook} spellbook. Please add spells on the character sheet.",
+  "scu.errorNoSpellToCast": "{actor} doesn't have any spell left to cast or doesn't have the ability to cast a spell.",
   
   "" : ""
 }

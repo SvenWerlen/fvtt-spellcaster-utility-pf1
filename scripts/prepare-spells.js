@@ -53,9 +53,13 @@ class SCUPrepareSpells extends FormApplication {
       this.spells.sort(function(a,b) { return a.name.localeCompare(b.name); })
     }
     
+    if( this.spells.length == 0 ) {
+      data.errorMsg = game.i18n.format("scu.errorNoSpell", {actor: this.actor.name, spellbook: this.spellbook}); return data
+    }
+    
     let levels = {}
     this.spells.forEach( sp => {
-      console.log(sp)
+      //console.log(sp)
       const lvl = sp.data.level
       if( ! levels[lvl] ) {
         levels[lvl] = { level: lvl, localize : "PF1.SpellLevel" + lvl, prepared: 0, 'spells': []}

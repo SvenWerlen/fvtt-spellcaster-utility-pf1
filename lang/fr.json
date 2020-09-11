@@ -13,6 +13,9 @@
   "scu.errorNoActor": "Vous ne controllez pas d'acteur. Veuillez contacter votre MJ à ce sujet.",
   "scu.errorMultipleActors": "Vous controllez plus d'un acteur. Sélectionnez un token sur la scène.",
   "scu.errorInvalidActor": "'{actor}' n'est pas un PJ. Veuillez choisir un acteur valide!",
+  "scu.errorNoSpell": "{actor} n'a aucun sort dans son grimoire {spellbook}. Veuillez ajouter des sorts sur la feuille de PJ.",
+  "scu.errorNoSpellToCast": "{actor} n'a plus de sort à incanter ou n'a pas la capacité de lancer des sorts.",
+  
   
   "" : ""
 }

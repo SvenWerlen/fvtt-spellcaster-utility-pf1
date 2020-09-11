@@ -1,6 +1,18 @@
 # Spellcaster utility for PF1
 
-This module provides tools for spellcasters.
+This module provides tools for spellcasters. 
+
+## Prepare spells
+
+Prepare the spells for the day in a few seconds.
+
+![Prepare spells](doc/img/prepare.jpg)
+
+## Cast spells
+
+Cast a spell. The interface only displays prepared (and remaining) spells.
+
+![Cast spells](doc/img/cast.jpg)
 
 ### Install module
 

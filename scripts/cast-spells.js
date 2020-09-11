@@ -48,6 +48,7 @@ class SCUCastSpells extends FormApplication {
     let spells = duplicate(this.actor.data.items.filter( i => i.type == "spell" && i.data.spellbook == this.spellbook ))
     spells.sort(function(a,b) { return a.name.localeCompare(b.name); })
     
+    let count = 0
     let levels = {}
     spells.forEach( sp => {
       //console.log(sp)
@@ -70,9 +71,14 @@ class SCUCastSpells extends FormApplication {
       let spell = duplicate(sp)
       spell.data.school = CONFIG.PF1.spellSchools[sp.data.school]
       levels[lvl]['spells'].push(spell)
+      count += 1
     });
     levels = Object.values(levels).sort(function(a,b) { return a.level - b.level; })
     data.levels = levels
+    
+    if( count == 0 ) {
+      data.errorMsg = game.i18n.format("scu.errorNoSpellToCast", {actor: this.actor.name, spellbook: this.spellbook}); return data
+    }
     
     return data
   }
