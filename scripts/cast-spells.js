@@ -84,7 +84,7 @@ class SCUCastSpells extends FormApplication {
   }
 
   activateListeners(html) {
-    super.activateListeners(html);
+    //super.activateListeners(html);
     html.find('.item .item-image').click(event => this._onItemRoll(event));
     html.find('.item-name h4').mousedown(event => this._onItemUse(event));
     html.find(".item-controls a").click(event => this._onItemUse(event));

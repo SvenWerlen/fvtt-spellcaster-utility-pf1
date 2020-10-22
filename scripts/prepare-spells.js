@@ -84,7 +84,7 @@ class SCUPrepareSpells extends FormApplication {
   }
 
   activateListeners(html) {
-    super.activateListeners(html);
+    //super.activateListeners(html);
     html.find(".item-controls a").click(this._onControl.bind(this));
     html.find('.item-name h4').mousedown(this._onControl.bind(this));
     html.find('button[name="clear"]').click(this._onClear.bind(this))
