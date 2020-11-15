@@ -38,7 +38,7 @@ class SCUCastSpells extends FormApplication {
     actors = actors.filter(o => o.hasPerm(game.user, "OWNER"));
     if( actors.length == 0 ) { data.errorMsg = game.i18n.format("scu.errorNoActor"); return data }
     if( actors.length > 1 ) { data.errorMsg = game.i18n.format("scu.errorMultipleActors"); return data }
-    if( !actors[0].isPC ) { data.errorMsg = game.i18n.format("scu.errorInvalidActor", { 'actor' : actors[0].name }); return data }
+    //if( !actors[0].isPC ) { data.errorMsg = game.i18n.format("scu.errorInvalidActor", { 'actor' : actors[0].name }); return data }
     this.actor = actors[0]
     
     // prepare spells (copy from actor)

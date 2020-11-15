@@ -16,6 +16,10 @@
   margin-left: 12px;
 }
 
+.scu .spell-uses {
+  text-align: center;
+}
+
 .scu .inventory-list .item.prepared .spell-uses {
   font-size: large;
 }

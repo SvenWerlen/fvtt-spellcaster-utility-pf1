@@ -4,7 +4,7 @@
 {{#unless errorMsg}}
 <div class="description">{{localize "scu.prepareDescription"}}</div>
 
-<div class="tab inventory-group flexcol active" data-group="spells_primary" data-tab="spells_primary_0">
+<div class="tab spellbook-group flexcol active" data-group="spells_primary" data-tab="spells_primary_0">
   <ol class="inventory-list scroll scroll-spells_primary">
     {{#each levels as |level sid|}}
     <li class="flexrow inventory-header spellbook-header">
@@ -12,7 +12,7 @@
         <h3>{{localize level.localize}}</h3>
       </div>
       
-      <div class="spell-uses config">
+      <div class="item-detail spell-uses">
         <div class="tooltip">
           <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> 
           {{ level.prepared }}
@@ -25,7 +25,7 @@
         </div>
         {{/unless}}
       </div>
-      <div class="spell-school">{{localize "PF1.SpellSchool"}}</div>
+      <div class="item-detail spell-school"><i class="icon icon-spell-book large" title="École du sort"></i></div>
       <div class="item-controls">{{localize "scu.actions"}}</div>
       
     </li>
@@ -37,7 +37,7 @@
           <h4 class="name">{{spell.name}}</h4>
         </div>
         
-        <div class="spell-uses flexrow">
+        <div class="item-detail spell-uses flexrow">
           {{#if ../../spontaneous}}
             <div class="tooltip">
               {{#if spell.data.preparation.spontaneousPrepared}}
@@ -54,7 +54,7 @@
             </div>
           {{/unless}}
         </div>
-        <div class="spell-school">{{ spell.data.school }}</div>
+        <div class="item-detail spell-school"><span>{{ spell.data.school }}</span></div>
         <div class="item-controls">
         {{#unless ../../spontaneous}}
           <a class="item-control spell-uses-add" title="{{ localize "scu.preparedAdd" }}"><i class="fas fa-plus"></i></a>
