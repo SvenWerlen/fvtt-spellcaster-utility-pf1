@@ -86,13 +86,43 @@ class SCUCastSpells extends FormApplication {
   activateListeners(html) {
     //super.activateListeners(html);
     html.find('.item .item-image').click(event => this._onItemRoll(event));
-    html.find('.item-name h4').mousedown(event => this._onItemUse(event));
-    html.find(".item-controls a").click(event => this._onItemUse(event));
+    html.find(".item .item-name h4").click((event) => this._onItemSummary(event));
+    html.find(".item-controls a").click(event => this._onItemUse(event));    
     
     // restore scroll position
     if(this.scrollTop) {
       html.find('.scroll').scrollTop(this.scrollTop);
     }
+  }
+  
+  _onItemSummary(event) {
+    event.preventDefault();
+    let li = $(event.currentTarget).parents(".item"),
+      item = this.actor.getOwnedItem(li.attr("data-item-id")),
+      chatData = item.getChatData({ secrets: this.actor.owner });
+
+    // Toggle summary
+    if (li.hasClass("expanded")) {
+      let summary = li.children(".item-summary");
+      summary.slideUp(200, () => summary.remove());
+    } else {
+      let div = $(`<div class="item-summary">${chatData.description.value}</div>`);
+      let props = $(`<div class="item-properties"></div>`);
+      chatData.properties.forEach((p) => props.append(`<span class="tag">${p}</span>`));
+      div.append(props);
+      li.append(div.hide());
+      div.slideDown(200);
+    }
+    li.toggleClass("expanded");
+  }
+  
+  _onItemRoll(event) {
+    event.preventDefault();
+    const itemId = event.currentTarget.closest(".item").dataset.itemId;
+    const item = this.actor.getOwnedItem(itemId);
+
+    if (item == null) return;
+    return item.roll();
   }
   
   async _onItemUse(event) {
@@ -101,11 +131,11 @@ class SCUCastSpells extends FormApplication {
     const item = this.actor.getOwnedItem(itemId);
 
     if (item == null) return;
-    await item.use({ev: event});
-    
-    // keep track of current scroll position
-    this.scrollTop = event.currentTarget.closest(".scroll").scrollTop;
-    this.close()
+    if( await item.use({ev: event}) ) {
+      // keep track of current scroll position
+      this.scrollTop = event.currentTarget.closest(".scroll").scrollTop;
+      this.render(true)
+    }
   }
   
 }

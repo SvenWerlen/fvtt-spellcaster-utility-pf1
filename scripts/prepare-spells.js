@@ -86,15 +86,36 @@ class SCUPrepareSpells extends FormApplication {
   activateListeners(html) {
     //super.activateListeners(html);
     html.find(".item-controls a").click(this._onControl.bind(this));
-    html.find('.item-name h4').mousedown(this._onControl.bind(this));
     html.find('button[name="clear"]').click(this._onClear.bind(this))
     html.find('button[name="apply"]').click(this._onApply.bind(this))
+    html.find(".item .item-name h4").click((event) => this._onItemSummary(event));
     html.find('.item .item-image').click(event => this._onItemRoll(event));
     
     // restore scroll position
     if(this.scrollTop) {
       html.find('.scroll').scrollTop(this.scrollTop);
     }
+  }
+  
+  _onItemSummary(event) {
+    event.preventDefault();
+    let li = $(event.currentTarget).parents(".item"),
+      item = this.actor.getOwnedItem(li.attr("data-item-id")),
+      chatData = item.getChatData({ secrets: this.actor.owner });
+
+    // Toggle summary
+    if (li.hasClass("expanded")) {
+      let summary = li.children(".item-summary");
+      summary.slideUp(200, () => summary.remove());
+    } else {
+      let div = $(`<div class="item-summary">${chatData.description.value}</div>`);
+      let props = $(`<div class="item-properties"></div>`);
+      chatData.properties.forEach((p) => props.append(`<span class="tag">${p}</span>`));
+      div.append(props);
+      li.append(div.hide());
+      div.slideDown(200);
+    }
+    li.toggleClass("expanded");
   }
   
   _onItemRoll(event) {
@@ -121,12 +142,7 @@ class SCUPrepareSpells extends FormApplication {
     this.scrollTop = a.closest(".scroll").scrollTop;
     
     // retrieve action (add/sub)
-    let actionAdd = true
-    if(a.classList.contains("name")) {
-      actionAdd = event.which == 1
-    } else {
-      actionAdd = a.classList.contains("spell-uses-add")
-    }
+    let actionAdd = a.classList.contains("spell-uses-add")
     
     // increase / decrease
     const spontaneous = this.actor.data.data.attributes.spells.spellbooks[this.spellbook].spontaneous
