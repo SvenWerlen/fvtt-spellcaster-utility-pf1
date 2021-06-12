@@ -1,10 +1,10 @@
+<form class="{{cssClass}}" autocomplete="off">
 {{#if errorMsg}}
   <div class="error">{{errorMsg}}</div>
 {{/if}}
 {{#unless errorMsg}}
-<div class="description">{{localize "scu.castDescription"}}</div>
-
 <div class="tab spellbook-group flexcol active" data-group="spells_primary" data-tab="spells_primary_0">
+  <div class="description">{{localize "scu.castDescription"}}</div>
   <ol class="inventory-list scroll scroll-spells_primary">
     {{#each levels as |level sid|}}
     <li class="flexrow inventory-header spellbook-header">
@@ -65,3 +65,4 @@
   </ol>
 </div>
 {{/unless}}
+</form>

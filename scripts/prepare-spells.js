@@ -49,7 +49,7 @@ class SCUPrepareSpells extends FormApplication {
     data.spontaneous = spellbook.spontaneous
 
     if( !this.spells ) {
-      this.spells = duplicate(this.actor.data.items.filter( i => i.type == "spell" && i.data.spellbook == this.spellbook ))
+      this.spells = duplicate(this.actor.data.items.filter( i => i.type == "spell" && i.data.data.spellbook == this.spellbook ))
       this.spells.sort(function(a,b) { return a.name.localeCompare(b.name); })
     }
     
@@ -216,7 +216,7 @@ class SCUPrepareSpells extends FormApplication {
     this.close()
     
     // update all spells
-    this.actor.updateEmbeddedEntity("OwnedItem", updates); // Updates one EmbeddedEntity
+    this.actor.updateEmbeddedDocuments("Item", updates); // Updates one EmbeddedEntity
     
     // update character with count per level
     let update = { data: { attributes: { spells: { spellbooks: { } } } } }

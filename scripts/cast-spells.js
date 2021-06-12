@@ -45,7 +45,7 @@ class SCUCastSpells extends FormApplication {
     const spellbook = this.actor.data.data.attributes.spells.spellbooks[this.spellbook]
     data.spontaneous = spellbook.spontaneous
 
-    let spells = duplicate(this.actor.data.items.filter( i => i.type == "spell" && i.data.spellbook == this.spellbook ))
+    let spells = duplicate(this.actor.data.items.filter( i => i.type == "spell" && i.data.data.spellbook == this.spellbook ))
     spells.sort(function(a,b) { return a.name.localeCompare(b.name); })
     
     let count = 0
