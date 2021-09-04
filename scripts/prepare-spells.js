@@ -35,8 +35,7 @@ class SCUPrepareSpells extends FormApplication {
     if( !this.actor ) {
       const tokens = canvas.tokens.controlled;
       let actors = tokens.map(o => o.actor);
-      if (!actors.length) actors = game.actors.entities.filter(o => o.isPC && o.hasPerm(game.user, "OWNER"));
-      actors = actors.filter(o => o.hasPerm(game.user, "OWNER"));
+      if (!actors.length) actors = game.actors.contents.filter(o => o.isOwner);
       if( actors.length == 0 ) { data.errorMsg = game.i18n.format("scu.errorNoActor"); return data }
       if( actors.length > 1 ) { data.errorMsg = game.i18n.format("scu.errorMultipleActors"); return data }
       //if( !actors[0].isPC ) { data.errorMsg = game.i18n.format("scu.errorInvalidActor", { 'actor' : actors[0].name }); return data }
@@ -100,7 +99,7 @@ class SCUPrepareSpells extends FormApplication {
   _onItemSummary(event) {
     event.preventDefault();
     let li = $(event.currentTarget).parents(".item"),
-      item = this.actor.getOwnedItem(li.attr("data-item-id")),
+      item = this.actor.items.get(li.attr("data-item-id")),
       chatData = item.getChatData({ secrets: this.actor.owner });
 
     // Toggle summary
@@ -121,7 +120,7 @@ class SCUPrepareSpells extends FormApplication {
   _onItemRoll(event) {
     event.preventDefault();
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
-    const item = this.actor.getOwnedItem(itemId);
+    const item = this.actor.items.get(itemId);
 
     if (item == null) return;
     return item.roll();
