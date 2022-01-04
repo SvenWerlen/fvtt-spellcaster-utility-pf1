@@ -98,7 +98,7 @@ class SCUCastSpells extends FormApplication {
   _onItemSummary(event) {
     event.preventDefault();
     let li = $(event.currentTarget).parents(".item"),
-      item = this.actor.getOwnedItem(li.attr("data-item-id")),
+      item = this.actor.items.get(li.attr("data-item-id")),
       chatData = item.getChatData({ secrets: this.actor.owner });
 
     // Toggle summary
@@ -119,7 +119,7 @@ class SCUCastSpells extends FormApplication {
   _onItemRoll(event) {
     event.preventDefault();
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
-    const item = this.actor.getOwnedItem(itemId);
+    const item = this.actor.items.get(itemId);
 
     if (item == null) return;
     return item.roll();
@@ -128,7 +128,7 @@ class SCUCastSpells extends FormApplication {
   async _onItemUse(event) {
     event.preventDefault();
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
-    const item = this.actor.getOwnedItem(itemId);
+    const item = this.actor.items.get(itemId);
 
     if (item == null) return;
     if( await item.use({ev: event}) ) {
