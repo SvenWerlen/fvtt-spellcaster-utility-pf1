@@ -40,21 +40,21 @@
         <div class="item-detail spell-uses flexrow">
           {{#if ../../spontaneous}}
             <div class="tooltip">
-              {{#if spell.data.preparation.spontaneousPrepared}}
+              {{#if spell.system.preparation.spontaneousPrepared}}
                 <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> <i class="fas fa-check"></i>
               {{/if}}
-              {{#unless spell.data.preparation.spontaneousPrepared}}
+              {{#unless spell.system.preparation.spontaneousPrepared}}
                 <span class="tooltipcontent">{{ localize "PF1.Unprepared" }}</span> 
               {{/unless}}
             </div>
           {{/if}}
           {{#unless ../../spontaneous}}
             <div class="tooltip">
-              <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> {{spell.data.preparation.preparedAmount}}
+              <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> {{spell.system.preparation.preparedAmount}}
             </div>
           {{/unless}}
         </div>
-        <div class="item-detail spell-school"><span>{{ spell.data.school }}</span></div>
+        <div class="item-detail spell-school"><span>{{ spell.system.school }}</span></div>
         <div class="item-controls">
           <a class="item-control item-attack"><img class="icon" src="systems/pf1/icons/actions/gladius.svg"></a>
         </div> 

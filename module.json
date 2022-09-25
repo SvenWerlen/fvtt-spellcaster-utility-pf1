@@ -1,35 +1,59 @@
 {
-  "name": "spellcaster-utility-pf1",
   "title": "Spellcaster utility for PF1",
   "description": "Several UI and tools for spellcaster (PF1 system)",
-  "version": "1.0.0",
-  "author": "Sven Werlen",
-  "scripts": ["spellcaster.js", "scripts/prepare-spells.js", "scripts/cast-spells.js"],
-  "systems": ["pf1"],
-  "styles": ["spellcaster.css"],
+  "version": "2.0.0",
+  "scripts": [
+    "spellcaster.js",
+    "scripts/prepare-spells.js",
+    "scripts/cast-spells.js"
+  ],
+  "styles": [
+    "spellcaster.css"
+  ],
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     },
     {
       "lang": "fr",
       "name": "French",
-      "path": "lang/fr.json"
+      "path": "lang/fr.json",
+      "flags": {}
     }
   ],
   "packs": [
     {
       "name": "spellcaster-macros",
       "label": "Spellcaster Macros",
-      "path": "./packs/spellcaster-macros.db",
-      "entity": "Macro"
+      "path": "packs/spellcaster-macros.db",
+      "type": "Macro",
+      "private": false,
+      "flags": {}
     }
   ],
   "url": "https://github.com/SvenWerlen/fvtt-spellcaster-utility-pf1",
   "download": "https://github.com/SvenWerlen/fvtt-spellcaster-utility-pf1/archive/v-1.0.0.zip",
   "manifest": "https://raw.githubusercontent.com/SvenWerlen/fvtt-spellcaster-utility-pf1/master/module.json",
-  "minimumCoreVersion": "9",
-  "compatibleCoreVersion": "9"
+  "id": "spellcaster-utility-pf1",
+  "authors": [
+    {
+      "name": "Sven Werlen",
+      "flags": {}
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "pf1",
+        "type": "system",
+        "compatibility": {}
+      }
+    ]
+  },
+  "compatibility": {
+    "minimum": "10"
+  }
 }

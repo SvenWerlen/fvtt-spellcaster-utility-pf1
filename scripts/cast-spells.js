@@ -42,21 +42,21 @@ class SCUCastSpells extends FormApplication {
     this.actor = actors[0]
     
     // prepare spells (copy from actor)
-    const spellbook = this.actor.data.data.attributes.spells.spellbooks[this.spellbook]
+    const spellbook = this.actor.system.attributes.spells.spellbooks[this.spellbook]
     data.spontaneous = spellbook.spontaneous
 
-    let spells = duplicate(this.actor.data.items.filter( i => i.type == "spell" && i.data.data.spellbook == this.spellbook ))
+    let spells = duplicate(this.actor.items.filter( i => i.type == "spell" && i.system.spellbook == this.spellbook ))
     spells.sort(function(a,b) { return a.name.localeCompare(b.name); })
     
     let count = 0
     let levels = {}
     spells.forEach( sp => {
       //console.log(sp)
-      const lvl = sp.data.level
-      if(data.spontaneous && !sp.data.preparation.spontaneousPrepared) {
+      const lvl = sp.system.level
+      if(data.spontaneous && !sp.system.preparation.spontaneousPrepared) {
          return
       }
-      else if( !data.spontaneous && sp.data.preparation.preparedAmount <= 0 ) {
+      else if( !data.spontaneous && sp.system.preparation.preparedAmount <= 0 ) {
         return;
       }
       else if( data.spontaneous && spellbook.spells["spell" + lvl].value <= 0 ) {
@@ -69,7 +69,7 @@ class SCUCastSpells extends FormApplication {
         levels[lvl]['remaining'] = data.spontaneous ? spellbook.spells["spell" + lvl].value : null
       }
       let spell = duplicate(sp)
-      spell.data.school = CONFIG.PF1.spellSchools[sp.data.school]
+      spell.system.school = CONFIG.PF1.spellSchools[sp.system.school]
       levels[lvl]['spells'].push(spell)
       count += 1
     });

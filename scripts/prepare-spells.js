@@ -43,11 +43,11 @@ class SCUPrepareSpells extends FormApplication {
     }
     
     // prepare spells (copy from actor)
-    const spellbook = this.actor.data.data.attributes.spells.spellbooks[this.spellbook]
+    const spellbook = this.actor.system.attributes.spells.spellbooks[this.spellbook]
     data.spontaneous = spellbook.spontaneous
 
     if( !this.spells ) {
-      this.spells = duplicate(this.actor.data.items.filter( i => i.type == "spell" && i.data.data.spellbook == this.spellbook ))
+      this.spells = duplicate(this.actor.items.filter( i => i.type == "spell" && i.system.spellbook == this.spellbook ))
       this.spells.sort(function(a,b) { return a.name.localeCompare(b.name); })
     }
     
@@ -57,22 +57,21 @@ class SCUPrepareSpells extends FormApplication {
     
     let levels = {}
     this.spells.forEach( sp => {
-      //console.log(sp)
-      const lvl = sp.data.level
+      const lvl = sp.system.level
       if( ! levels[lvl] ) {
         levels[lvl] = { level: lvl, localize : "PF1.SpellLevel" + lvl, prepared: 0, 'spells': []}
         levels[lvl]['max'] = spellbook.spells["spell" + lvl].max
       }
       let spell = duplicate(sp)
-      spell.data.school = CONFIG.PF1.spellSchools[sp.data.school]
+      spell.system.school = CONFIG.PF1.spellSchools[sp.system.school]
       levels[lvl]['spells'].push(spell)
       if(data.spontaneous) {
-        spell.prepared = sp.data.preparation.spontaneousPrepared ? "prepared" : ""
+        spell.prepared = sp.system.preparation.spontaneousPrepared ? "prepared" : ""
         levels[lvl]['prepared'] += spell.prepared ? 1 : 0
       }
       else {
-        spell.prepared = sp.data.preparation.preparedAmount > 0 ? "prepared" : ""
-        levels[lvl]['prepared'] += sp.data.preparation.preparedAmount
+        spell.prepared = sp.system.preparation.preparedAmount > 0 ? "prepared" : ""
+        levels[lvl]['prepared'] += sp.system.preparation.preparedAmount
       }
     });
     levels = Object.values(levels).sort(function(a,b) { return a.level - b.level; })
@@ -143,12 +142,12 @@ class SCUPrepareSpells extends FormApplication {
     let actionAdd = a.classList.contains("spell-uses-add")
     
     // increase / decrease
-    const spontaneous = this.actor.data.data.attributes.spells.spellbooks[this.spellbook].spontaneous
+    const spontaneous = this.actor.system.attributes.spells.spellbooks[this.spellbook].spontaneous
     if(spontaneous) {
-      spell.data.preparation.spontaneousPrepared = actionAdd
+      spell.system.preparation.spontaneousPrepared = actionAdd
     }
     else {
-      spell.data.preparation.preparedAmount += actionAdd ? 1 : -1
+      spell.system.preparation.preparedAmount += actionAdd ? 1 : -1
     }
     this.render()
   }
@@ -158,12 +157,12 @@ class SCUPrepareSpells extends FormApplication {
     console.log("Spellcaster Utility | Clear preparation")
     if(!this.actor) { return }
     
-    const spontaneous = this.actor.data.data.attributes.spells.spellbooks[this.spellbook].spontaneous
+    const spontaneous = this.actor.system.attributes.spells.spellbooks[this.spellbook].spontaneous
     this.spells.forEach( sp => {
       if(spontaneous) {
-        sp.data.preparation.spontaneousPrepared = false
+        sp.system.preparation.spontaneousPrepared = false
       } else {
-        sp.data.preparation.preparedAmount = 0
+        sp.system.preparation.preparedAmount = 0
       }
     });
     this.render()
@@ -175,34 +174,34 @@ class SCUPrepareSpells extends FormApplication {
     console.log("Spellcaster Utility | Apply changes")
     if(!this.actor) { return }
     
-    const spontaneous = this.actor.data.data.attributes.spells.spellbooks[this.spellbook].spontaneous
+    const spontaneous = this.actor.system.attributes.spells.spellbooks[this.spellbook].spontaneous
     
     let levels = {}
     let updates = []
     this.spells.forEach( sp => {
-      const amount = spontaneous ? 0 : sp.data.preparation.preparedAmount
+      const amount = spontaneous ? 0 : sp.system.preparation.preparedAmount
 
       // update count for that level
-      if(levels[sp.data.level]) {
-        levels[sp.data.level] += amount
+      if(levels[sp.system.level]) {
+        levels[sp.system.level] += amount
       } else {
-        levels[sp.data.level] = amount
+        levels[sp.system.level] = amount
       }
       
       // prepare update for spell
       if( spontaneous ) {
         updates.push( { 
           _id: sp._id, 
-          data: { 
+          system: {
             preparation: { 
-              spontaneousPrepared: sp.data.preparation.spontaneousPrepared 
+              spontaneousPrepared: sp.system.preparation.spontaneousPrepared
             }
           }
         })
       } else {
         updates.push( { 
           _id: sp._id, 
-          data: { 
+          system: {
             preparation: {
               preparedAmount: amount,
               maxAmount: amount
@@ -217,13 +216,13 @@ class SCUPrepareSpells extends FormApplication {
     this.actor.updateEmbeddedDocuments("Item", updates); // Updates one EmbeddedEntity
     
     // update character with count per level
-    let update = { data: { attributes: { spells: { spellbooks: { } } } } }
-    update.data.attributes.spells.spellbooks[this.spellbook] = { spells: {} }
+    let update = { system: { attributes: { spells: { spellbooks: { } } } } }
+    update.system.attributes.spells.spellbooks[this.spellbook] = { spells: {} }
     Object.keys(levels).forEach( lvl => {
       const key = "spell" + lvl
-      const max = this.actor.data.data.attributes.spells.spellbooks[this.spellbook].spells[key].max
+      const max = this.actor.system.attributes.spells.spellbooks[this.spellbook].spells[key].max
       if(!spontaneous) {
-        update.data.attributes.spells.spellbooks[this.spellbook].spells[key] = { value: max - levels[lvl] }
+        update.system.attributes.spells.spellbooks[this.spellbook].spells[key] = { value: max - levels[lvl] }
       }
     });
     this.actor.update(update)
