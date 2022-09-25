@@ -1,7 +1,7 @@
 {
   "title": "Spellcaster utility for PF1",
   "description": "Several UI and tools for spellcaster (PF1 system)",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "scripts": [
     "spellcaster.js",
     "scripts/prepare-spells.js",
@@ -35,7 +35,7 @@
     }
   ],
   "url": "https://github.com/SvenWerlen/fvtt-spellcaster-utility-pf1",
-  "download": "https://github.com/SvenWerlen/fvtt-spellcaster-utility-pf1/archive/v-2.0.0.zip",
+  "download": "https://github.com/SvenWerlen/fvtt-spellcaster-utility-pf1/archive/v-2.1.0.zip",
   "manifest": "https://raw.githubusercontent.com/SvenWerlen/fvtt-spellcaster-utility-pf1/master/module.json",
   "id": "spellcaster-utility-pf1",
   "authors": [

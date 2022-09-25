@@ -122,7 +122,7 @@ class SCUCastSpells extends FormApplication {
     const item = this.actor.items.get(itemId);
 
     if (item == null) return;
-    return item.roll();
+    return item.displayCard();
   }
   
   async _onItemUse(event) {
@@ -131,11 +131,9 @@ class SCUCastSpells extends FormApplication {
     const item = this.actor.items.get(itemId);
 
     if (item == null) return;
-    if( await item.use({ev: event}) ) {
-      // keep track of current scroll position
-      this.scrollTop = event.currentTarget.closest(".scroll").scrollTop;
-      this.render(true)
-    }
+
+    await this.close()
+    item.use({ev: event})
   }
   
 }
