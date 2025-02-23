@@ -6,6 +6,12 @@
   max-height: 20px;
 }
 
+.scu .dialog-buttons {
+  bottom: 10px;
+  position: absolute;
+  width: 100%;
+}
+
 .scu .dialog-buttons button {
   margin-top: 5px;
   max-width: 200px;
@@ -30,4 +36,10 @@
 
 .scu .sep {
   padding: 0px 5px;
+}
+
+.scu .cast-content, .scu .spell-content {
+  display: block !important;
+  overflow-y: scroll;
+  margin-bottom: 50px;
 }

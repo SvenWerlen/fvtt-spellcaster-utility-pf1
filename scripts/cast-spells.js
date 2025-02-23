@@ -22,7 +22,7 @@ class SCUCastSpells extends FormApplication {
       title: game.i18n.localize("scu.castTitle"),
       template: "modules/spellcaster-utility-pf1/templates/cast-spells.html",
       //width: 650,
-      height: 600,
+      height: "auto",
       resizable: true,
       closeOnSubmit: false,
       submitOnClose: false,

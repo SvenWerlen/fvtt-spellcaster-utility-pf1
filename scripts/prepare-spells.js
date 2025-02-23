@@ -22,7 +22,7 @@ class SCUPrepareSpells extends FormApplication {
       title: game.i18n.localize("scu.prepareTitle"),
       template: "modules/spellcaster-utility-pf1/templates/prepare-spells.html",
       //width: 650,
-      height: 600,
+      height: "auto",
       resizable: true,
       closeOnSubmit: false,
       submitOnClose: false,
