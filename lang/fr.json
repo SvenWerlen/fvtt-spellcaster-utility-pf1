@@ -1,21 +1,21 @@
 {
-  "scu.prepareTitle": "Préparation de sorts",
-  "scu.prepareDescription": "Utilisez les actions pour préparer des sorts. Vous pouvez également faire un clic gauche/droit sur le nom.",
-  "scu.preparedAdd": "Preparer ce sort",
+  "scu.prepareTitle": "Préparation des sorts",
+  "scu.prepareDescription": "Utilisez les actions pour préparer des sorts.",
+  "scu.prepareDescriptionAlt": "Vous pouvez également faire un clic droit sur le nom.",
+  "scu.preparedAdd": "Préparer ce sort",
   "scu.preparedSub": "Retirer de la liste préparée",
   "scu.clearPreparation": "Vider la préparation",
   "scu.applyChanges": "Appliquer les changements",
   "scu.actions": "Actions",
   
   "scu.castTitle": "Incanter un sort",
-  "scu.castDescription": "Utilisez l'action pour incanter un sort. Vous pouvez également cliquer sur le nom.",
-  
-  "scu.errorNoActor": "Vous ne controllez pas d'acteur. Veuillez contacter votre MJ à ce sujet.",
-  "scu.errorMultipleActors": "Vous controllez plus d'un acteur. Sélectionnez un token sur la scène.",
+  "scu.castDescription": "Utilisez l'action pour incanter un sort.",
+    
+  "scu.errorNoActor": "Vous ne contrôlez pas d'acteur. Veuillez contacter votre MJ à ce sujet.",
+  "scu.errorMultipleActors": "Vous contrôlez plus d'un acteur. Sélectionnez un token sur la scène.",
   "scu.errorInvalidActor": "'{actor}' n'est pas un PJ. Veuillez choisir un acteur valide!",
   "scu.errorNoSpell": "{actor} n'a aucun sort dans son grimoire {spellbook}. Veuillez ajouter des sorts sur la feuille de PJ.",
   "scu.errorNoSpellToCast": "{actor} n'a plus de sort à incanter ou n'a pas la capacité de lancer des sorts.",
-  
   
   "" : ""
 }

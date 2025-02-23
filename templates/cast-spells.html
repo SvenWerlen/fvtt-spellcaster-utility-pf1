@@ -5,23 +5,21 @@
 {{#unless errorMsg}}
 <div class="tab spellbook-group flexcol active" data-group="spells_primary" data-tab="spells_primary_0">
   <div class="description">{{localize "scu.castDescription"}}</div>
-  <ol class="inventory-list scroll scroll-spells_primary">
+  <ol class="item-list scroll scroll-spells_primary">
     {{#each levels as |level sid|}}
-    <li class="flexrow inventory-header spellbook-header">
+    <li class="flexrow item-list-header spellbook-header">
       <div class="item-name flexrow">
         <h3>{{localize level.localize}}</h3>
       </div>
       
       <div class="item-detail spell-uses">
         {{#if level.remaining}}
-        <div class="tooltip">
-          <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> 
-          {{ level.remaining }}
+        <div data-tooltip="{{ localize 'PF1.Prepared' }}">
+          <span>{{ level.remaining }}</span>
         </div>
         <span class="sep"> / </span>
-        <div class="tooltip">
-          <span class="tooltipcontent">{{localize "PF1.SpellsTotalEachDay"}}</span> 
-          {{ level.max }}
+        <div data-tooltip="{{ localize 'PF1.SpellsTotalEachDay' }}">
+          <span>{{ level.max }}</span>
         </div>
         {{/if}}
       </div>
@@ -41,17 +39,21 @@
           {{#if ../../spontaneous}}
             <div class="tooltip">
               {{#if spell.system.preparation.spontaneousPrepared}}
-                <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> <i class="fas fa-check"></i>
+                <div data-tooltip="{{ localize 'PF1.Prepared' }}">
+                  <span><i class="fas fa-check"></i></span>
+                </div>  
               {{/if}}
               {{#unless spell.system.preparation.spontaneousPrepared}}
-                <span class="tooltipcontent">{{ localize "PF1.Unprepared" }}</span> 
+                <div data-tooltip="{{ localize 'PF1.Unprepared' }}">
+                  <span>&nbsp;</span>
+                </div>  
               {{/unless}}
             </div>
           {{/if}}
           {{#unless ../../spontaneous}}
-            <div class="tooltip">
-              <span class="tooltipcontent">{{ localize "PF1.Prepared" }}</span> {{spell.system.preparation.preparedAmount}}
-            </div>
+            <div data-tooltip="{{ localize 'PF1.Prepared' }}">
+              <span>{{spell.system.preparation.value}}</span>
+            </div>  
           {{/unless}}
         </div>
         <div class="item-detail spell-school"><span>{{ spell.system.school }}</span></div>

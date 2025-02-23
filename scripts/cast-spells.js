@@ -16,8 +16,8 @@ class SCUCastSpells extends FormApplication {
   }
   
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      id: "letscontributereview",
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "cast-spells",
       classes: ["dialog", "scu", "cast", "pf1", "sheet", "actor", "character"],
       title: game.i18n.localize("scu.castTitle"),
       template: "modules/spellcaster-utility-pf1/templates/cast-spells.html",
@@ -45,7 +45,7 @@ class SCUCastSpells extends FormApplication {
     const spellbook = this.actor.system.attributes.spells.spellbooks[this.spellbook]
     data.spontaneous = spellbook.spontaneous
 
-    let spells = duplicate(this.actor.items.filter( i => i.type == "spell" && i.system.spellbook == this.spellbook ))
+    let spells = foundry.utils.duplicate(this.actor.items.filter( i => i.type == "spell" && i.system.spellbook == this.spellbook ))
     spells.sort(function(a,b) { return a.name.localeCompare(b.name); })
     
     let count = 0
@@ -53,22 +53,19 @@ class SCUCastSpells extends FormApplication {
     spells.forEach( sp => {
       //console.log(sp)
       const lvl = sp.system.level
-      if(data.spontaneous && !sp.system.preparation.spontaneousPrepared) {
-         return
-      }
-      else if( !data.spontaneous && sp.system.preparation.preparedAmount <= 0 ) {
+      if( sp.system.preparation.value <= 0 ) {
         return;
       }
-      else if( data.spontaneous && spellbook.spells["spell" + lvl].value <= 0 ) {
+      if( data.spontaneous && spellbook.spells["spell" + lvl].value <= 0 ) {
         return;
       }
       
       if( ! levels[lvl] ) {
-        levels[lvl] = { level: lvl, localize : "PF1.SpellLevel" + lvl, 'spells': []}
+        levels[lvl] = { level: lvl, localize : "PF1.SpellLevels." + lvl, 'spells': []}
         levels[lvl]['max'] = spellbook.spells["spell" + lvl].max
         levels[lvl]['remaining'] = data.spontaneous ? spellbook.spells["spell" + lvl].value : null
       }
-      let spell = duplicate(sp)
+      let spell = foundry.utils.duplicate(sp)
       spell.system.school = CONFIG.PF1.spellSchools[sp.system.school]
       levels[lvl]['spells'].push(spell)
       count += 1
@@ -95,18 +92,18 @@ class SCUCastSpells extends FormApplication {
     }
   }
   
-  _onItemSummary(event) {
+  async _onItemSummary(event) {
     event.preventDefault();
-    let li = $(event.currentTarget).parents(".item"),
-      item = this.actor.items.get(li.attr("data-item-id")),
-      chatData = item.getChatData({ secrets: this.actor.owner });
-
+    let li = $(event.currentTarget).parents(".item")
+    let item = this.actor.items.get(li.attr("data-item-id"))
+    
     // Toggle summary
     if (li.hasClass("expanded")) {
       let summary = li.children(".item-summary");
       summary.slideUp(200, () => summary.remove());
     } else {
-      let div = $(`<div class="item-summary">${chatData.description.value}</div>`);
+      let chatData = await item.getChatData({ chatcard: false })
+      let div = $(`<div class="item-summary">${chatData.description}</div>`);
       let props = $(`<div class="item-properties"></div>`);
       chatData.properties.forEach((p) => props.append(`<span class="tag">${p}</span>`));
       div.append(props);

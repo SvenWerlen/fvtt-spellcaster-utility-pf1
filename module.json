@@ -30,8 +30,9 @@
       "label": "Spellcaster Macros",
       "path": "packs/spellcaster-macros.db",
       "type": "Macro",
-      "private": false,
-      "flags": {}
+      "flags": {},
+      "system": "pf1",
+      "private": false
     }
   ],
   "url": "https://github.com/SvenWerlen/fvtt-spellcaster-utility-pf1",
@@ -54,6 +55,7 @@
     ]
   },
   "compatibility": {
-    "minimum": "10"
+    "minimum": "10",
+    "verified": "12"
   }
 }

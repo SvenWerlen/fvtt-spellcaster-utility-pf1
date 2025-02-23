@@ -1,6 +1,7 @@
 {
   "scu.prepareTitle": "Prepare Spells",
-  "scu.prepareDescription": "Use actions to prepare spells. Alternatively, you can left/right click on the spell name.",
+  "scu.prepareDescription": "Use actions to prepare spells.",
+  "scu.prepareDescriptionAlt": "Alternatively, you can right-click on the spell name.",
   "scu.preparedAdd": "Prepare this spell",
   "scu.preparedSub": "Remove from prepared list",
   "scu.clearPreparation": "Clear preparation",
@@ -8,13 +9,13 @@
   "scu.actions": "Actions",
 
   "scu.castTitle": "Cast Spell",
-  "scu.castDescription": "Use action to cast a spell. Alternatively, you can click on the spell name.",  
+  "scu.castDescription": "Use an action to cast a spell.",  
   
-  "scu.errorNoActor": "You are not owner of any actor. Please contact your GM about this.",
+  "scu.errorNoActor": "You do not own any actor. Please contact your GM about this.",
   "scu.errorMultipleActors": "You own more than one actor. Please choose an actor on the scene.",
   "scu.errorInvalidActor": "'{actor}' is not a PC. Please choose a valid actor!",
-  "scu.errorNoSpell": "{actor} doesn't have any spell in {spellbook} spellbook. Please add spells on the character sheet.",
-  "scu.errorNoSpellToCast": "{actor} doesn't have any spell left to cast or doesn't have the ability to cast a spell.",
+  "scu.errorNoSpell": "{actor} doesn't have any spells in the {spellbook} spellbook. Please add spells on the character sheet.",
+  "scu.errorNoSpellToCast": "{actor} doesn't have any spells left to cast or doesn't have the ability to cast a spell.",
   
   "" : ""
 }

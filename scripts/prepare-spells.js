@@ -16,8 +16,8 @@ class SCUPrepareSpells extends FormApplication {
   }
   
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      id: "letscontributereview",
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      id: "prepare-spells",
       classes: ["dialog", "scu", "prepare", "pf1", "sheet", "actor", "character"],
       title: game.i18n.localize("scu.prepareTitle"),
       template: "modules/spellcaster-utility-pf1/templates/prepare-spells.html",
@@ -47,7 +47,7 @@ class SCUPrepareSpells extends FormApplication {
     data.spontaneous = spellbook.spontaneous
 
     if( !this.spells ) {
-      this.spells = duplicate(this.actor.items.filter( i => i.type == "spell" && i.system.spellbook == this.spellbook ))
+      this.spells = foundry.utils.duplicate(this.actor.items.filter( i => i.type == "spell" && i.system.spellbook == this.spellbook ))
       this.spells.sort(function(a,b) { return a.name.localeCompare(b.name); })
     }
     
@@ -59,20 +59,14 @@ class SCUPrepareSpells extends FormApplication {
     this.spells.forEach( sp => {
       const lvl = sp.system.level
       if( ! levels[lvl] ) {
-        levels[lvl] = { level: lvl, localize : "PF1.SpellLevel" + lvl, prepared: 0, 'spells': []}
+        levels[lvl] = { level: lvl, localize : "PF1.SpellLevels." + lvl, prepared: 0, 'spells': []}
         levels[lvl]['max'] = spellbook.spells["spell" + lvl].max
       }
-      let spell = duplicate(sp)
+      let spell = foundry.utils.duplicate(sp)
       spell.system.school = CONFIG.PF1.spellSchools[sp.system.school]
       levels[lvl]['spells'].push(spell)
-      if(data.spontaneous) {
-        spell.prepared = sp.system.preparation.spontaneousPrepared ? "prepared" : ""
-        levels[lvl]['prepared'] += spell.prepared ? 1 : 0
-      }
-      else {
-        spell.prepared = sp.system.preparation.preparedAmount > 0 ? "prepared" : ""
-        levels[lvl]['prepared'] += sp.system.preparation.preparedAmount
-      }
+      spell.prepared = sp.system.preparation.value > 0 ? "prepared" : ""
+      levels[lvl]['prepared'] += sp.system.preparation.value
     });
     levels = Object.values(levels).sort(function(a,b) { return a.level - b.level; })
     data.levels = levels
@@ -86,6 +80,7 @@ class SCUPrepareSpells extends FormApplication {
     html.find('button[name="clear"]').click(this._onClear.bind(this))
     html.find('button[name="apply"]').click(this._onApply.bind(this))
     html.find(".item .item-name h4").click((event) => this._onItemSummary(event));
+    html.find(".item .item-name h4").mousedown((event) => this._onTogglePrepare(event));
     html.find('.item .item-image').click(event => this._onItemRoll(event));
     
     // restore scroll position
@@ -94,18 +89,18 @@ class SCUPrepareSpells extends FormApplication {
     }
   }
   
-  _onItemSummary(event) {
+  async _onItemSummary(event) {
     event.preventDefault();
-    let li = $(event.currentTarget).parents(".item"),
-      item = this.actor.items.get(li.attr("data-item-id")),
-      chatData = item.getChatData({ secrets: this.actor.owner });
-
+    let li = $(event.currentTarget).parents(".item")
+    let item = this.actor.items.get(li.attr("data-item-id"))
+    
     // Toggle summary
     if (li.hasClass("expanded")) {
       let summary = li.children(".item-summary");
       summary.slideUp(200, () => summary.remove());
     } else {
-      let div = $(`<div class="item-summary">${chatData.description.value}</div>`);
+      let chatData = await item.getChatData({ chatcard: false })
+      let div = $(`<div class="item-summary">${chatData.description}</div>`);
       let props = $(`<div class="item-properties"></div>`);
       chatData.properties.forEach((p) => props.append(`<span class="tag">${p}</span>`));
       div.append(props);
@@ -125,6 +120,19 @@ class SCUPrepareSpells extends FormApplication {
   }
 
   
+  async _onTogglePrepare(event) {
+    const spontaneous = this.actor.system.attributes.spells.spellbooks[this.spellbook].spontaneous
+    if (spontaneous && event.which === 3) {
+      const itemId = event.currentTarget.closest(".item").dataset.itemId;
+      // retrieve spell
+      let spell = this.spells.filter( i => i._id == itemId )
+      if( spell.length == 0 ) return
+      spell = spell[0]
+      spell.system.preparation.value = spell.system.preparation.value > 0 ? 0 : 1
+      this.render()
+    }
+  }
+
   async _onControl(event) {
     event.preventDefault();
     const a = event.currentTarget;
@@ -144,10 +152,14 @@ class SCUPrepareSpells extends FormApplication {
     // increase / decrease
     const spontaneous = this.actor.system.attributes.spells.spellbooks[this.spellbook].spontaneous
     if(spontaneous) {
-      spell.system.preparation.spontaneousPrepared = actionAdd
+      spell.system.preparation.value = actionAdd ? 1 : 0
     }
     else {
-      spell.system.preparation.preparedAmount += actionAdd ? 1 : -1
+      if(actionAdd) {
+        spell.system.preparation.value++  
+      } else if(spell.system.preparation.value > 0) {
+        spell.system.preparation.value--
+      }
     }
     this.render()
   }
@@ -159,11 +171,7 @@ class SCUPrepareSpells extends FormApplication {
     
     const spontaneous = this.actor.system.attributes.spells.spellbooks[this.spellbook].spontaneous
     this.spells.forEach( sp => {
-      if(spontaneous) {
-        sp.system.preparation.spontaneousPrepared = false
-      } else {
-        sp.system.preparation.preparedAmount = 0
-      }
+      sp.system.preparation.value = 0
     });
     this.render()
   }
@@ -179,7 +187,7 @@ class SCUPrepareSpells extends FormApplication {
     let levels = {}
     let updates = []
     this.spells.forEach( sp => {
-      const amount = spontaneous ? 0 : sp.system.preparation.preparedAmount
+      const amount = sp.system.preparation.value
 
       // update count for that level
       if(levels[sp.system.level]) {
@@ -187,28 +195,16 @@ class SCUPrepareSpells extends FormApplication {
       } else {
         levels[sp.system.level] = amount
       }
-      
-      // prepare update for spell
-      if( spontaneous ) {
-        updates.push( { 
-          _id: sp._id, 
-          system: {
-            preparation: { 
-              spontaneousPrepared: sp.system.preparation.spontaneousPrepared
-            }
+
+      updates.push( { 
+        _id: sp._id, 
+        system: {
+          preparation: {
+            value: amount,
+            max: amount
           }
-        })
-      } else {
-        updates.push( { 
-          _id: sp._id, 
-          system: {
-            preparation: {
-              preparedAmount: amount,
-              maxAmount: amount
-            }
-          }
-        })
-      }
+        }
+      })
     });
     this.close()
     
